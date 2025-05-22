@@ -63,46 +63,120 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-a {
-  color: #1772d0;
-  text-decoration: none;
+:root {
+  /* Variables for the toggle mechanism */
+  --toggleHeight: 16em;
+  --toggleWidth: 30em;
+  --toggleBtnRadius: 10em;
+  --bgColor--night: #423966; /* Toggle background color in night state */
+  --toggleBtn-bgColor--night: var(--bgColor--night); /* Moon button background */
+  --mooncolor: #D9FBFF; /* Moon crescent color */
+  --bgColor--day: #9ee3fb; /* Toggle background color in day state */
+
+  /* Theme color variables */
+  /* Light Theme Colors */
+  --bg-color-light: #FFFFFF; /* Ensure white */
+  --text-color-light: #000000; /* Changed to black */
+  --link-color-light: #007bff; /* Changed to blue */
+  --link-hover-color-light: #0056b3; /* New hover blue */
+  --heading-color-light: #000000;
+  --papertitle-color-light: #000000;
+  --name-color-light: #000000;
+  --highlight-bg-color-light: #ffffd0;
+  --highlight-text-color-light: #000000;
+  --red-text-color-light: #FF0000;
+
+  /* Dark Theme Colors (Default) */
+  --bg-color-dark: #000000; /* Changed to black */
+  --text-color-dark: #FFFFFF; /* Changed to white */
+  --link-color-dark: #4dabf7; /* Brighter blue for dark bg */
+  --link-hover-color-dark: #1a8cff; /* New hover blue for dark bg */
+  --heading-color-dark: #e0e0e0; 
+  --papertitle-color-dark: #e0e0e0;
+  --name-color-dark: #e0e0e0;
+  --highlight-bg-color-dark: #555555; 
+  --highlight-text-color-dark: #ffffff;
+  --red-text-color-dark: #FF6347;
 }
 
-a:focus,
-a:hover {
-  color: #f09228;
-  text-decoration: none;
-}
+/* body.dark-mode rule is removed by this replacement */
 
-body,
-td,
-th,
-tr,
-p,
-a {
+/* Base body styles (Light Theme by default) */
+body {
+  transition: all .2s ease-in-out;
+  background: var(--bg-color-light); 
+  color: var(--text-color-light);    
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
-  font-size: 14px
+  font-size: 14px;
+}
+
+/* Dark Theme styles */
+body.dark-theme { /* Renamed from body.light to body.dark-theme */
+  background: var(--bg-color-dark);    
+  color: var(--text-color-dark);   
+}
+
+/* General typography and layout elements */
+td, th, tr, p {
+  font-family: 'Lato', Verdana, Helvetica, sans-serif; /* Ensure consistent font */
+  font-size: 14px;
+  /* color and background-color will be inherited from body or body.dark-theme */
+}
+
+/* Link styling: Default to light theme, then override for dark-theme */
+a {
+  color: var(--link-color-light); 
+  text-decoration: none;
+}
+a:focus, a:hover {
+  color: var(--link-hover-color-light);
+  text-decoration: underline; 
+}
+body.dark-theme a { /* Styles for links in dark theme */
+  color: var(--link-color-dark);
+}
+body.dark-theme a:focus, body.dark-theme a:hover {
+  color: var(--link-hover-color-dark);
+  text-decoration: underline;
 }
 
 strong {
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 14px;
+  /* color will be inherited from body text color based on theme */
+  font-weight: bold; 
 }
 
-heading {
+/* Element styling: Default to light theme, then override for dark-theme */
+heading { /* Custom tag */
+  display: block; 
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 22px;
+  color: var(--heading-color-light); /* Default to light */
+}
+body.dark-theme heading {
+  color: var(--heading-color-dark); /* Dark theme override */
 }
 
-papertitle {
+papertitle { /* Custom tag */
+  display: inline; 
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 14px;
-  font-weight: 700
+  font-weight: 700;
+  color: var(--papertitle-color-light); /* Default to light */
+}
+body.dark-theme papertitle {
+  color: var(--papertitle-color-dark); /* Dark theme override */
 }
 
-name {
+name { /* Custom tag */
+  display: block; 
   font-family: 'Lato', Verdana, Helvetica, sans-serif;
   font-size: 32px;
+  color: var(--name-color-light); /* Default to light */
+}
+body.dark-theme name {
+  color: var(--name-color-dark); /* Dark theme override */
 }
 
 .one {
@@ -127,5 +201,89 @@ name {
 }
 
 span.highlight {
-  background-color: #ffffd0;
+  background-color: var(--highlight-bg-color-light); /* Default to light */
+  color: var(--highlight-text-color-light);
+  padding: 0.1em 0.2em; 
 }
+body.dark-theme span.highlight { /* Dark theme override */
+  background-color: var(--highlight-bg-color-dark);
+  color: var(--highlight-text-color-dark);
+}
+
+/* Styles for red "Seeking full-time..." text */
+p[style="color:red;"] > Strong { 
+    color: var(--red-text-color-light); /* Default to light */
+}
+body.dark-theme p[style="color:red;"] > Strong { 
+    color: var(--red-text-color-dark); /* Dark theme override */
+}
+
+
+/* Animated toggle CSS - This should remain largely the same */
+/* The toggle's visual state is controlled by .sun and .day classes added by JS */
+/* Base .moon and .tdnn styles represent the "night" (moon) state of the toggle */
+#toggleContainer {
+  position: absolute; 
+  top: 0;
+  right: 0;
+  z-index: 1000; 
+  padding: 15px; /* Match HTML */
+}
+.tdnn {
+  margin: 0 auto;
+  font-size: 12%; /* Reduced for a smaller toggle */
+  position: relative;
+  height: var(--toggleHeight);
+  width: var(--toggleWidth);
+  border-radius: var(--toggleHeight);
+  transition: all 500ms ease-in-out;
+  background: var(--bgColor--night); /* Toggle bg night */
+  cursor: pointer;
+}
+.tdnn.day {
+  background: #FFBF71; /* Toggle bg day */
+}
+.moon {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  transition: all 400ms ease-in-out;
+  top: 3em;
+  left: 3em;
+  transform: rotate(-75deg);
+  width: var(--toggleBtnRadius);
+  height: var(--toggleBtnRadius);
+  background: var(--toggleBtn-bgColor--night); /* Moon button bg */
+  box-shadow: 
+    3em 2.5em 0 0em var(--mooncolor) inset, /* Crescent */
+    rgba(255, 255, 255, 0.1) 0em -7em 0 -4.5em,  /* Stars */
+    rgba(255, 255, 255, 0.1) 3em 7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 2em 13em 0 -4em,
+    rgba(255, 255, 255, 0.1) 6em 2em 0 -4.1em,
+    rgba(255, 255, 255, 0.1) 8em 8em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) 6em 13em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) -4em 7em 0 -4.5em,
+    rgba(255, 255, 255, 0.1) -1em 10em 0 -4.5em;
+}
+.moon.sun {
+  top: 4.5em; /* Position for sun */
+  left: 18em; /* Position for sun */
+  transform: rotate(0deg);
+  width: 7em;  /* Sun size */
+  height: 7em; /* Sun size */
+  background: #fff; /* Sun color */
+  box-shadow: /* Sun rays */
+    /* 3em 3em 0 5em #fff inset, /* This makes the sun hollow, use 0 for solid */
+    0 0 0 5em #fff inset, /* Solid sun */
+    0 -5em 0 -2.7em #fff,
+    3.5em -3.5em 0 -3em #fff,
+    5em 0 0 -2.7em #fff,
+    3.5em 3.5em 0 -3em #fff,
+    0 5em 0 -2.7em #fff,
+    -3.5em 3.5em 0 -3em #fff,
+    -5em 0 0 -2.7em #fff,
+    -3.5em -3.5em 0 -3em #fff;
+}
+
+/* Ensure the red "Seeking full-time..." text is styled for both themes - MOVED UP */
+/* This block is now effectively removed as the content was moved up and merged */

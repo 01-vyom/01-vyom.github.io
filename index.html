@@ -9,9 +9,15 @@
   <link rel="image_src" href="https://01-vyom.github.io/images/thumbnail.jpg" />
   <link rel="stylesheet" type="text/css" href="stylesheet.css">
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡️</text></svg>">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 </head>
 
 <body>
+  <div id="toggleContainer" style="padding: 15px;"> <!-- Wrapper for positioning -->
+    <div class="tdnn">
+      <div class="moon"></div>
+    </div>
+  </div>
   <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
     <tr style="padding:0px">
       <td style="padding:0px">
@@ -441,5 +447,33 @@
       </td>
     </tr>
   </table>
+  <script>
+    $(document).ready(function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        $("body").addClass('dark-theme');
+        // For dark theme, toggle is moon: .moon (no .sun), .tdnn (no .day)
+        $(".moon").removeClass('sun'); 
+        $(".tdnn").removeClass('day');  
+      } else {
+        // Default to light theme (or if savedTheme is 'light' or null)
+        $("body").removeClass('dark-theme'); 
+        $(".moon").addClass('sun');    
+        $(".tdnn").addClass('day');     
+      }
+    });
+
+    $('.tdnn').click(function () {
+      $("body").toggleClass('dark-theme');
+      $(".moon").toggleClass('sun');
+      $(".tdnn").toggleClass('day');
+
+      if ($("body").hasClass('dark-theme')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
 </body>
 </html>
